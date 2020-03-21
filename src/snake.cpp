@@ -42,17 +42,21 @@ void Snake::UpdateHead() {
   head_x = fmod(head_x + grid_width, grid_width);
   head_y = fmod(head_y + grid_height, grid_height);
 }
-
+std::vector<SDL_Point> Snake::BodyPosition(){
+  return body;
+}
 void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) {
   // Add previous head location to vector
   body.push_back(prev_head_cell);
-
+  
   if (!growing) {
     // Remove the tail from the vector.
     body.erase(body.begin());
-  } else {
-    growing = false;
-    size++;
+  } 
+  else {
+      growing = false;
+      growing = false;
+      size++;
   }
 
   // Check if the snake has died.

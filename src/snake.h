@@ -19,7 +19,8 @@ class Snake {
   void GrowBody();
   bool SnakeCell(int x, int y);
 
-  Direction direction = Direction::kUp;
+  Direction direction = Direction(rand()%4);
+  std::vector<SDL_Point> BodyPosition();
 
   float speed{0.1f};
   int size{1};

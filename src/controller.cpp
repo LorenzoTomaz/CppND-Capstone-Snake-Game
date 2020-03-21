@@ -3,11 +3,20 @@
 #include "SDL.h"
 #include "snake.h"
 
+
+void Controller::MoveDumbEnemy(bool &running, Snake &dumbEnemy) const{
+  dumbEnemy.direction = Snake::Direction::kDown;
+  ChangeDirection(dumbEnemy, Snake::Direction::kDown, Snake::Direction::kUp);
+}
+
+
+
 void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
                                  Snake::Direction opposite) const {
   if (snake.direction != opposite || snake.size == 1) snake.direction = input;
   return;
 }
+
 
 void Controller::HandleInput(bool &running, Snake &snake) const {
   SDL_Event e;
@@ -39,3 +48,4 @@ void Controller::HandleInput(bool &running, Snake &snake) const {
     }
   }
 }
+

@@ -1,12 +1,15 @@
-#include "game.h"
 #include <iostream>
+#include <chrono>
+#include <thread>
+#include "game.h"
 #include "SDL.h"
+typedef std::chrono::high_resolution_clock Clock;
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
-    : snake(grid_width, grid_height),
+    : snake(grid_width, grid_height), dumbEnemy(grid_width, grid_height),
       engine(dev()),
-      random_w(0, static_cast<int>(grid_width)),
-      random_h(0, static_cast<int>(grid_height)) {
+      random_w(0, static_cast<int>(grid_width)-1),
+      random_h(0, static_cast<int>(grid_height)-1) {
   PlaceFood();
 }
 
@@ -25,7 +28,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, dumbEnemy, food, power);
 
     frame_end = SDL_GetTicks();
 
@@ -39,6 +42,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       renderer.UpdateWindowTitle(score, frame_count);
       frame_count = 0;
       title_timestamp = frame_end;
+      MoveDumbEnemy();
     }
 
     // If the time for this frame is too small (i.e. frame_duration is
@@ -62,6 +66,9 @@ void Game::PlaceFood() {
       food.y = y;
       return;
     }
+    else {
+      continue;
+    }
   }
 }
 
@@ -69,19 +76,45 @@ void Game::Update() {
   if (!snake.alive) return;
 
   snake.Update();
-
+  dumbEnemy.Update();
   int new_x = static_cast<int>(snake.head_x);
   int new_y = static_cast<int>(snake.head_y);
-
+  int de_new_x = static_cast<int>(dumbEnemy.head_x);
+  int de_new_y = static_cast<int>(dumbEnemy.head_y);
   // Check if there's food over here
   if (food.x == new_x && food.y == new_y) {
     score++;
     PlaceFood();
-    // Grow snake and increase speed.
     snake.GrowBody();
+    dumbEnemy.GrowBody();
     snake.speed += 0.02;
+    dumbEnemy.speed += 0.012;
   }
+  for(const auto item: dumbEnemy.BodyPosition()){
+    if(new_x == item.x && new_y == item.y){
+      snake.alive = false;
+      std::cout << " _________________ " << std::endl;
+    std::cout << " //                 \\" << std::endl;
+    std::cout << "|     GAME   OVER     |"  << std::endl;
+    std::cout << " \\        ^        //" << std::endl;
+    std::cout << "   -----------------   "  << std::endl;
+    }
+  }
+
+  if((new_x == de_new_x && new_y == de_new_y && snake.size > 1)){
+    snake.alive = false;
+    std::cout << "   _________________ " << std::endl;
+    std::cout << " //                 \\" << std::endl;
+    std::cout << "|     GAME   OVER    |"  << std::endl;
+    std::cout << " \\        ^        //" << std::endl;
+    std::cout << "   -----------------   " << std::endl;
+  }
+  
 }
 
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
+void Game::MoveDumbEnemy(){
+  Snake::Direction direction = Snake::Direction(rand()%4);
+  dumbEnemy.direction = direction;
+}
