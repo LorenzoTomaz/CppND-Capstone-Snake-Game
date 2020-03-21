@@ -8,7 +8,7 @@ The overall project structure is fairly similar to the original.
 * Snake Class
 * Controller Class
 * Game Class
-* Renderer Clas
+* Renderer Class
 
 <img src="snake_game.gif"/>
 
