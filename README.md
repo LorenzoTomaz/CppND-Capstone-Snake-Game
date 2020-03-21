@@ -1,6 +1,14 @@
-# CPPND: Capstone Snake Game Example
+# CPPND: Capstone Snake Game with Enemy 
 
-This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
+This project was forked from the original Snake Game capstone repository with some modifications. The mechanics are the same as the original and the goal is to eat as much food as you can without touching the enemy snake.
+
+
+## Code Overview
+The overall project structure is fairly similar to the original. 
+* Snake Class
+* Controller Class
+* Game Class
+* Renderer Clas
 
 <img src="snake_game.gif"/>
 
